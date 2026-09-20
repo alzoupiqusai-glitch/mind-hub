@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة درب عقلك | Brain & Logic Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <button class="theme-toggle-btn" id="theme-toggler" onclick="toggleTheme()" title="تبديل الوضع (فاتح / داكن)">💡</button>
+
+    <!-- 1. شاشة تحديد العمر -->
+    <div id="age-selection-screen" class="screen-container">
+        <div class="welcome-card">
+            <div class="top-badge">🚀 المنصة العربية الأولى لتنمية المهارات العقلية</div>
+            <h1>منصة درب عقلك</h1>
+            <p class="welcome-desc">منصة هندسية متقدمة تدمج المتعة بالتحدي المعرفي العميق. اختر فئتك العمرية لاستعراض منظومة الألعاب المصممة خصيصاً لتفجير طاقات عقلك:</p>
+            
+            <div class="age-cards-wrapper">
+                <button class="age-option-card" onclick="setAgeGroup('under16')">
+                    <span class="card-icon">🌱</span>
+                    <h2>فئة تحت 16 سنة</h2>
+                    <p>6 ألعاب ذكاء وتنمية مهارات أساسية متقدمة لتعزيز التركيز وبناء الأساس المنطقي السليم.</p>
+                    <span class="card-tag">مستوى تنموي ذكي</span>
+                </button>
+
+                <button class="age-option-card" onclick="setAgeGroup('over16')">
+                    <span class="card-icon">🔥</span>
+                    <h2>فئة فوق 16 سنة</h2>
+                    <p>8 ألعاب ذكاء عميقة وضاغطة للدماغ، تشمل التحديات المعقدة، موازنة الكتل، والذاكرة العكسية.</p>
+                    <span class="card-tag">مستوى التحدي المتقدم</span>
+                </button>
+            </div>
+
+            <div class="developer-signature">
+                هذا المشروع هو الإصدار الأول الحصري للطالب <strong>قُصي الفندي</strong> | تخصص الذكاء الاصطناعي وعلوم البيانات 💡
+                <div class="social-links-container">
+                    <a href="https://www.instagram.com/qusai.alfandi?stkn=MWpzaXZ5N3pqM2Mzbw==" target="_blank" class="social-btn instagram">📷 إنستغرام</a>
+                    <a href="https://www.facebook.com/qusai.alzoupi.578008?mibextid=ZbWKwL" target="_blank" class="social-btn facebook">👥 فيسبوك</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. شاشة لوحة الألعاب -->
+    <div id="games-hub-screen" class="screen-container hidden">
+        <header class="hub-header">
+            <div class="hub-title-area">
+                <h2>🎮 لوحة ألعاب درب عقلك</h2>
+                <span id="active-age-badge" class="active-badge">الفئة المحددة</span>
+            </div>
+            <button class="return-nav-btn" onclick="returnToAgeSelection()">🔄 تغيير الفئة العمرية</button>
+        </header>
+
+        <main class="hub-main-content">
+            <div class="section-intro">
+                <h3>اختر التحدي العقلي للبدء:</h3>
+                <p>كل لعبة مزودة بنظام عشوائي ذكي وبنك تحديات ضخم لا يتكرر.</p>
+            </div>
+            <div id="dynamic-games-grid" class="games-grid-layout"></div>
+        </main>
+    </div>
+
+    <!-- 3. نافذة اللعبة المنبثقة -->
+    <div id="active-game-modal" class="modal-overlay hidden">
+        <div class="modal-window-box">
+            <div class="modal-top-bar">
+                <h3 id="modal-game-heading">عنوان اللعبة</h3>
+                <button class="modal-exit-btn" onclick="closeActiveGameModal()">✖ إغلاق اللعبة</button>
+            </div>
+            <div id="modal-game-content-area" class="modal-content-area"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
