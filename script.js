@@ -3891,102 +3891,59 @@ console.log('%c🌙 نظام تبديل الوضع محمّل', 'color:#0047AB;f
 
 console.log('%c🎬 Cinematic Loader v2.0 محمّل', 'color:#EC4899;font-weight:bold;');
 /* ============================================================
-   🎉 صفحة الترحيب + الصوت — النسخة النهائية v3.0
+   🎉 صفحة الترحيب + الصوت — النسخة النهائية v4.0 (MP3)
    ============================================================ */
 
 let welcomeSpoken = false;
-let arabicVoicesLoaded = false;
 
-/* ═══ تحميل الأصوات مسبقاً (حل مشكلة التأخير) ═══ */
-function loadVoices() {
-    return new Promise((resolve) => {
-        let voices = window.speechSynthesis.getVoices();
-        
-        if (voices.length > 0) {
-            arabicVoicesLoaded = true;
-            resolve(voices);
-            return;
-        }
-
-        // ننتظر لما تحمّل الأصوات
-        window.speechSynthesis.onvoiceschanged = () => {
-            voices = window.speechSynthesis.getVoices();
-            arabicVoicesLoaded = true;
-            resolve(voices);
-        };
-
-        // Timeout احتياطي
-        setTimeout(() => {
-            voices = window.speechSynthesis.getVoices();
-            resolve(voices);
-        }, 1000);
-    });
-}
-
-/* ═══ تشغيل الصوت — بدون تأخير ═══ */
-async function speakWelcome() {
+/* ═══ تشغيل الصوت الترحيبي (MP3) — يشتغل على كل الأجهزة ═══ */
+function speakWelcome() {
     if (welcomeSpoken) return;
-    if (!('speechSynthesis' in window)) {
-        console.warn('المتصفح لا يدعم Web Speech API');
-        return;
-    }
-
     welcomeSpoken = true;
-    window.speechSynthesis.cancel();
 
-    const text = 'أهلاً وسهلاً بك';
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'ar-SA';
-    utterance.rate = 0.9;
-    utterance.pitch = 0.7;
-    utterance.volume = 1;
-
-    // ⭐ ننتظر تحميل الأصوات (بدون تأخير ملحوظ)
-    const voices = await loadVoices();
-    console.log('🎙️ عدد الأصوات المتوفرة:', voices.length);
-
-    const arabicVoices = voices.filter(v => v.lang.toLowerCase().startsWith('ar'));
-    console.log('🎙️ الأصوات العربية:', arabicVoices.map(v => v.name));
-
-    // اختيار صوت ذكوري
-    const preferredMales = ['Maged', 'Naayf', 'Tarik', 'Majed'];
-    let selectedVoice = null;
-
-    for (const name of preferredMales) {
-        const v = arabicVoices.find(voice =>
-            voice.name.toLowerCase().includes(name.toLowerCase())
-        );
-        if (v) { selectedVoice = v; break; }
+    // ⭐ إعادة تشغيل AudioContext (لحل مشكلة الجوال)
+    if (typeof getAudioCtx === 'function') {
+        const ctx = getAudioCtx();
+        if (ctx && ctx.state === 'suspended') {
+            ctx.resume();
+        }
     }
 
-    if (!selectedVoice) {
-        selectedVoice = arabicVoices.find(v =>
-            v.name.toLowerCase().includes('male') ||
-            v.name.toLowerCase().includes('man')
-        );
-    }
+    try {
+        const audio = new Audio('welcome.mp3');
+        audio.volume = 1;
+        audio.preload = 'auto';
 
-    if (!selectedVoice && arabicVoices.length > 0) {
-        selectedVoice = arabicVoices[0];
-    }
+        const playPromise = audio.play();
 
-    if (selectedVoice) {
-        utterance.voice = selectedVoice;
-        console.log('🎙️ الصوت المستخدم:', selectedVoice.name);
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    console.log('🎵 الصوت الترحيبي اشتغل بنجاح');
+                })
+                .catch((err) => {
+                    console.warn('⚠️ فشل تشغيل الصوت:', err.message);
+                    // ⭐ fallback: نحاول مرة ثانية بعد أول ضغطة
+                    const retry = () => {
+                        audio.play().catch(() => {});
+                        document.removeEventListener('click', retry);
+                    };
+                    document.addEventListener('click', retry, { once: true });
+                });
+        }
+    } catch (err) {
+        console.warn('⚠️ خطأ في الصوت:', err.message);
     }
-
-    window.speechSynthesis.speak(utterance);
 }
 
-/* ═══ الانتقال من صفحة الترحيب (بدون تكرار) ═══ */
+/* ═══ بدء الرحلة — يخفي شاشة الترحيب ويفتح الرئيسية ═══ */
 let journeyStarted = false;
 
 function startJourney() {
     if (journeyStarted) return;
     journeyStarted = true;
 
-    // تشغيل الصوت
+    // ⭐ تشغيل الصوت أولاً
     speakWelcome();
 
     // إخفاء صفحة الترحيب
@@ -4006,16 +3963,19 @@ function startJourney() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }, 400);
+    } else {
+        // في حال ما في welcome-screen
+        if (homeScreen) homeScreen.classList.remove('hidden');
     }
 }
 
-/* ═══ إظهار صفحة الترحيب بعد شاشة التحميل (مرة واحدة فقط) ═══ */
+/* ═══ إظهار صفحة الترحيب بعد شاشة التحميل (مرة واحدة) ═══ */
 let welcomeShown = false;
 
 (function showWelcomeAfterLoader() {
     const checkInterval = setInterval(() => {
         const loader = document.getElementById('cinematic-loader');
-        
+
         // إذا شاشة التحميل اختفت
         if (!loader || loader.classList.contains('hidden') || !document.body.contains(loader)) {
             clearInterval(checkInterval);
@@ -4026,11 +3986,6 @@ let welcomeShown = false;
             const welcomeScreen = document.getElementById('welcome-screen');
             const homeScreen = document.getElementById('home-screen');
 
-            // ⭐ نحمّل الأصوات مسبقاً الآن (بدل ما ننتظر)
-            if ('speechSynthesis' in window) {
-                window.speechSynthesis.getVoices();
-            }
-
             if (homeScreen) homeScreen.classList.add('hidden');
             if (welcomeScreen) welcomeScreen.classList.remove('hidden');
         }
@@ -4039,7 +3994,7 @@ let welcomeShown = false;
     // حد أقصى 6 ثواني
     setTimeout(() => {
         clearInterval(checkInterval);
-        
+
         if (welcomeShown) return;
         welcomeShown = true;
 
@@ -4053,15 +4008,16 @@ let welcomeShown = false;
     }, 6000);
 })();
 
-/* ═══ تحميل الأصوات عند فتح الصفحة (استباقي) ═══ */
-if ('speechSynthesis' in window) {
-    // استدعاء أولي لتحميل الأصوات
-    window.speechSynthesis.getVoices();
-    
-    window.speechSynthesis.onvoiceschanged = () => {
-        window.speechSynthesis.getVoices();
-        console.log('🎙️ تم تحميل الأصوات');
-    };
-}
+/* ═══ تحميل الصوت مسبقاً (بدون انتظار) ═══ */
+(function preloadWelcomeAudio() {
+    try {
+        const audio = new Audio('welcome.mp3');
+        audio.preload = 'auto';
+        audio.load();
+        console.log('🎵 تم تحميل الصوت الترحيبي مسبقاً');
+    } catch (err) {
+        console.warn('⚠️ فشل التحميل المسبق:', err.message);
+    }
+})();
 
-console.log('%c🎉 صفحة الترحيب + الصوت v3.0 محمّلان', 'color:#EC4899;font-weight:bold;');
+console.log('%c🎉 صفحة الترحيب + الصوت v4.0 (MP3) محمّلة', 'color:#EC4899;font-weight:bold;');
