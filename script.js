@@ -3890,3 +3890,178 @@ console.log('%c🌙 نظام تبديل الوضع محمّل', 'color:#0047AB;f
 })();
 
 console.log('%c🎬 Cinematic Loader v2.0 محمّل', 'color:#EC4899;font-weight:bold;');
+/* ============================================================
+   🎉 صفحة الترحيب + الصوت — النسخة النهائية v3.0
+   ============================================================ */
+
+let welcomeSpoken = false;
+let arabicVoicesLoaded = false;
+
+/* ═══ تحميل الأصوات مسبقاً (حل مشكلة التأخير) ═══ */
+function loadVoices() {
+    return new Promise((resolve) => {
+        let voices = window.speechSynthesis.getVoices();
+        
+        if (voices.length > 0) {
+            arabicVoicesLoaded = true;
+            resolve(voices);
+            return;
+        }
+
+        // ننتظر لما تحمّل الأصوات
+        window.speechSynthesis.onvoiceschanged = () => {
+            voices = window.speechSynthesis.getVoices();
+            arabicVoicesLoaded = true;
+            resolve(voices);
+        };
+
+        // Timeout احتياطي
+        setTimeout(() => {
+            voices = window.speechSynthesis.getVoices();
+            resolve(voices);
+        }, 1000);
+    });
+}
+
+/* ═══ تشغيل الصوت — بدون تأخير ═══ */
+async function speakWelcome() {
+    if (welcomeSpoken) return;
+    if (!('speechSynthesis' in window)) {
+        console.warn('المتصفح لا يدعم Web Speech API');
+        return;
+    }
+
+    welcomeSpoken = true;
+    window.speechSynthesis.cancel();
+
+    const text = 'أهلاً وسهلاً بك';
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'ar-SA';
+    utterance.rate = 0.9;
+    utterance.pitch = 0.7;
+    utterance.volume = 1;
+
+    // ⭐ ننتظر تحميل الأصوات (بدون تأخير ملحوظ)
+    const voices = await loadVoices();
+    console.log('🎙️ عدد الأصوات المتوفرة:', voices.length);
+
+    const arabicVoices = voices.filter(v => v.lang.toLowerCase().startsWith('ar'));
+    console.log('🎙️ الأصوات العربية:', arabicVoices.map(v => v.name));
+
+    // اختيار صوت ذكوري
+    const preferredMales = ['Maged', 'Naayf', 'Tarik', 'Majed'];
+    let selectedVoice = null;
+
+    for (const name of preferredMales) {
+        const v = arabicVoices.find(voice =>
+            voice.name.toLowerCase().includes(name.toLowerCase())
+        );
+        if (v) { selectedVoice = v; break; }
+    }
+
+    if (!selectedVoice) {
+        selectedVoice = arabicVoices.find(v =>
+            v.name.toLowerCase().includes('male') ||
+            v.name.toLowerCase().includes('man')
+        );
+    }
+
+    if (!selectedVoice && arabicVoices.length > 0) {
+        selectedVoice = arabicVoices[0];
+    }
+
+    if (selectedVoice) {
+        utterance.voice = selectedVoice;
+        console.log('🎙️ الصوت المستخدم:', selectedVoice.name);
+    }
+
+    window.speechSynthesis.speak(utterance);
+}
+
+/* ═══ الانتقال من صفحة الترحيب (بدون تكرار) ═══ */
+let journeyStarted = false;
+
+function startJourney() {
+    if (journeyStarted) return;
+    journeyStarted = true;
+
+    // تشغيل الصوت
+    speakWelcome();
+
+    // إخفاء صفحة الترحيب
+    const welcomeScreen = document.getElementById('welcome-screen');
+    const homeScreen = document.getElementById('home-screen');
+
+    if (welcomeScreen) {
+        welcomeScreen.style.transition = 'opacity 0.4s ease';
+        welcomeScreen.style.opacity = '0';
+
+        setTimeout(() => {
+            welcomeScreen.classList.add('hidden');
+            welcomeScreen.style.opacity = '1';
+
+            if (homeScreen) {
+                homeScreen.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }, 400);
+    }
+}
+
+/* ═══ إظهار صفحة الترحيب بعد شاشة التحميل (مرة واحدة فقط) ═══ */
+let welcomeShown = false;
+
+(function showWelcomeAfterLoader() {
+    const checkInterval = setInterval(() => {
+        const loader = document.getElementById('cinematic-loader');
+        
+        // إذا شاشة التحميل اختفت
+        if (!loader || loader.classList.contains('hidden') || !document.body.contains(loader)) {
+            clearInterval(checkInterval);
+
+            if (welcomeShown) return;
+            welcomeShown = true;
+
+            const welcomeScreen = document.getElementById('welcome-screen');
+            const homeScreen = document.getElementById('home-screen');
+
+            // ⭐ نحمّل الأصوات مسبقاً الآن (بدل ما ننتظر)
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+
+            if (homeScreen) homeScreen.classList.add('hidden');
+            if (welcomeScreen) welcomeScreen.classList.remove('hidden');
+        }
+    }, 100);
+
+    // حد أقصى 6 ثواني
+    setTimeout(() => {
+        clearInterval(checkInterval);
+        
+        if (welcomeShown) return;
+        welcomeShown = true;
+
+        const loader = document.getElementById('cinematic-loader');
+        const welcomeScreen = document.getElementById('welcome-screen');
+        const homeScreen = document.getElementById('home-screen');
+
+        if (loader) loader.remove();
+        if (homeScreen) homeScreen.classList.add('hidden');
+        if (welcomeScreen) welcomeScreen.classList.remove('hidden');
+    }, 6000);
+})();
+
+/* ═══ تحميل الأصوات عند فتح الصفحة (استباقي) ═══ */
+if ('speechSynthesis' in window) {
+    // استدعاء أولي لتحميل الأصوات
+    window.speechSynthesis.getVoices();
+    
+    window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+        console.log('🎙️ تم تحميل الأصوات');
+    };
+}
+
+console.log('%c🎉 صفحة الترحيب + الصوت v3.0 محمّلان', 'color:#EC4899;font-weight:bold;');
