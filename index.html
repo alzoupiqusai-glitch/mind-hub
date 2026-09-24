@@ -3,82 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة درب عقلك | Brain & Logic Hub</title>
-    <link rel="stylesheet" href="style.css">
-    <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-FPWCE66T36"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <title>درب عقلك | MIND FORGE</title>
 
-  gtag('config', 'G-FPWCE66T36');
-</script>
+    <!-- الخطوط -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+ <!-- شاشة التحميل -->
+<div id="cinematic-loader" class="cinematic-loader">
+    <div class="loader-content">
+        <div class="loader-logo-wrap">
+            <svg class="loader-logo" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="loaderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="100%" stop-color="#EC4899"/>
+                    </linearGradient>
+                    <linearGradient id="loaderRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.8"/>
+                        <stop offset="100%" stop-color="#EC4899" stop-opacity="0.8"/>
+                    </linearGradient>
+                </defs>
 
-    <button class="theme-toggle-btn" id="theme-toggler" onclick="toggleTheme()" title="تبديل الوضع (فاتح / داكن)">💡</button>
+                <circle cx="80" cy="80" r="62" stroke="url(#loaderRingGrad)" stroke-width="2.5" fill="none" stroke-dasharray="4 8"/>
+                <circle cx="80" cy="80" r="72" stroke="url(#loaderRingGrad)" stroke-width="1" fill="none" opacity="0.3"/>
 
-    <!-- 1. شاشة تحديد العمر -->
-    <div id="age-selection-screen" class="screen-container">
-        <div class="welcome-card">
-            <div class="top-badge">🚀 المنصة العربية الأولى لتنمية المهارات العقلية</div>
-            <h1>منصة درب عقلك</h1>
-            <p class="welcome-desc">منصة هندسية متقدمة تدمج المتعة بالتحدي المعرفي العميق. اختر فئتك العمرية لاستعراض منظومة الألعاب المصممة خصيصاً لتفجير طاقات عقلك:</p>
-            
-            <div class="age-cards-wrapper">
-                <button class="age-option-card" onclick="setAgeGroup('under16')">
-                    <span class="card-icon">🌱</span>
-                    <h2>فئة تحت 16 سنة</h2>
-                    <p>6 ألعاب ذكاء وتنمية مهارات أساسية متقدمة لتعزيز التركيز وبناء الأساس المنطقي السليم.</p>
-                    <span class="card-tag">مستوى تنموي ذكي</span>
-                </button>
+                <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#loaderGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#loaderGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
 
-                <button class="age-option-card" onclick="setAgeGroup('over16')">
-                    <span class="card-icon">🔥</span>
-                    <h2>فئة فوق 16 سنة</h2>
-                    <p>8 ألعاب ذكاء عميقة وضاغطة للدماغ، تشمل التحديات المعقدة، موازنة الكتل، والذاكرة العكسية.</p>
-                    <span class="card-tag">مستوى التحدي المتقدم</span>
-                </button>
+        <h1 class="loader-title">MIND FORGE</h1>
+
+        <div class="loader-progress-bar">
+            <div class="loader-progress-fill" id="loader-progress-fill"></div>
+        </div>
+
+        <p class="loader-percent" id="loader-percent">0%</p>
+    </div>
+</div>
+    <!-- ============================================
+         زر تبديل الوضع
+         ============================================ -->
+    <button class="theme-toggle" id="theme-toggle" onclick="toggleTheme()" type="button" aria-label="تبديل الوضع">
+        <svg class="theme-icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <svg class="theme-icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+    </button>
+
+    <!-- ============================================
+         1. الواجهة الرئيسية
+         ============================================ -->
+    <div id="home-screen" class="screen">
+
+        <!-- رأس المنصة -->
+        <div class="brand-header">
+            <div class="logo-wrap">
+                <svg class="logo-mf" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="gradMF" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#7C3AED"/>
+                            <stop offset="100%" stop-color="#EC4899"/>
+                        </linearGradient>
+                        <linearGradient id="gradRing" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.6"/>
+                            <stop offset="100%" stop-color="#EC4899" stop-opacity="0.6"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="80" cy="80" r="62" stroke="url(#gradRing)" stroke-width="3" fill="none" stroke-dasharray="4 8" opacity="0.7"/>
+                    <circle cx="80" cy="80" r="72" stroke="url(#gradRing)" stroke-width="1.5" fill="none" opacity="0.35"/>
+                    <circle cx="80" cy="18" r="4" fill="#7C3AED"/>
+                    <circle cx="142" cy="80" r="4" fill="#EC4899"/>
+                    <circle cx="80" cy="142" r="4" fill="#7C3AED"/>
+                    <circle cx="18" cy="80" r="4" fill="#EC4899"/>
+                    <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#gradMF)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                    <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#gradMF)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+            <div class="brand-text">
+                <h1 class="brand-title">درب عقلك</h1>
+                <p class="brand-subtitle">MIND FORGE</p>
+            </div>
+        </div>
+
+        <!-- الترحيب الديناميكي -->
+        <p class="welcome-message" id="welcome-message"></p>
+
+        <!-- شريط الفوائد المتحرك -->
+        <div class="benefits-ticker">
+            <div class="benefits-track">
+                <span class="benefit-item">🧠 تقوية الذاكرة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">⚡ سرعة البديهة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🎯 تركيز أعلى</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">👁️ إدراك بصري</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🔄 مرونة ذهنية</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">📊 إحصائيات دقيقة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🧠 تقوية الذاكرة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">⚡ سرعة البديهة</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🎯 تركيز أعلى</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">👁️ إدراك بصري</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">🔄 مرونة ذهنية</span>
+                <span class="benefit-sep">•</span>
+                <span class="benefit-item">📊 إحصائيات دقيقة</span>
+                <span class="benefit-sep">•</span>
+            </div>
+        </div>
+
+        <!-- اختيار الفئة -->
+        <h2 class="section-title">اختر الفئة العمرية</h2>
+
+        <div class="age-cards">
+    <button class="age-card" onclick="selectAge('under16')" type="button">
+        <div class="age-card-icon">🌱</div>
+        <h3 class="age-card-title">مرحلة البداية</h3>
+        <p class="age-card-desc">لعبة تنموية</p>
+        <p class="age-card-sub">لعمر أقل من 16 سنة</p>
+        <span class="age-card-btn">ابدأ المرحلة</span>
+    </button>
+
+    <button class="age-card" onclick="selectAge('over16')" type="button">
+        <div class="age-card-icon">🔥</div>
+        <h3 class="age-card-title">مرحلة التحدي</h3>
+        <p class="age-card-desc">لعبة متقدمة</p>
+        <p class="age-card-sub">لعمر فوق 16 سنة</p>
+        <span class="age-card-btn">ابدأ المرحلة</span>
+    </button>
+</div>
+        <!-- لوحة الإحصائيات -->
+        <div class="stats-board">
+            <h3 class="stats-title">📊 مجموعك</h3>
+
+            <div class="stats-score">
+                <span class="stats-current" id="stats-current">0</span>
+                <span class="stats-score-label">نقطة</span>
             </div>
 
-            <div class="developer-signature">
-                هذا المشروع هو الإصدار الأول الحصري للطالب <strong>قُصي الفندي</strong> | تخصص الذكاء الاصطناعي وعلوم البيانات 💡
-                <div class="social-links-container">
-                    <a href="https://www.instagram.com/qusai.alfandi?stkn=MWpzaXZ5N3pqM2Mzbw==" target="_blank" class="social-btn instagram">📷 إنستغرام</a>
-                    <a href="https://www.facebook.com/qusai.alzoupi.578008?mibextid=ZbWKwL" target="_blank" class="social-btn facebook">👥 فيسبوك</a>
+            <div class="stats-bar">
+                <div class="stats-bar-fill" id="stats-bar-fill"></div>
+            </div>
+
+            <div class="stats-percent-row">
+                <span class="stats-percent" id="stats-percent">0%</span>
+                <span class="stats-games-count" id="stats-games-count">لعبت 0 من 0</span>
+            </div>
+
+            <div class="stats-bottom">
+                <div class="stats-item">
+                    <span class="stats-label">🏆 أعلى لعبة</span>
+                    <span class="stats-value" id="stats-best">—</span>
+                </div>
+                <div class="stats-item">
+                    <span class="stats-label">🎯 أقل لعبة</span>
+                    <span class="stats-value" id="stats-worst">—</span>
                 </div>
             </div>
         </div>
+
+        <!-- الشريط السفلي -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-social">
+                    <a href="https://www.instagram.com/qusai.alfandi" target="_blank" rel="noopener" class="footer-icon" aria-label="إنستغرام">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/qusai.alzoupi.578008" target="_blank" rel="noopener" class="footer-icon" aria-label="فيسبوك">
+                        <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                </div>
+                <p class="footer-name">قُصي الفندي</p>
+                <p class="footer-copyright">© 2026 MIND FORGE</p>
+            </div>
+        </footer>
+
     </div>
 
-    <!-- 2. شاشة لوحة الألعاب -->
-    <div id="games-hub-screen" class="screen-container hidden">
-        <header class="hub-header">
-            <div class="hub-title-area">
-                <h2>🎮 لوحة ألعاب درب عقلك</h2>
-                <span id="active-age-badge" class="active-badge">الفئة المحددة</span>
-            </div>
-            <button class="return-nav-btn" onclick="returnToAgeSelection()">🔄 تغيير الفئة العمرية</button>
-        </header>
+    <!-- ============================================
+         2. لوحة الألعاب
+         ============================================ -->
+    <div id="games-screen" class="screen hidden">
 
-        <main class="hub-main-content">
-            <div class="section-intro">
-                <h3>اختر التحدي العقلي للبدء:</h3>
-                <p>كل لعبة مزودة بنظام عشوائي ذكي وبنك تحديات ضخم لا يتكرر.</p>
-            </div>
-            <div id="dynamic-games-grid" class="games-grid-layout"></div>
-        </main>
+        <div class="games-header">
+            <h2 class="games-title">لوحة الألعاب</h2>
+            <button class="back-btn" onclick="goHome()" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+                    <path d="M19 12H5"/>
+                    <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                الرئيسية
+            </button>
+        </div>
+
+        <p class="games-intro">اختر التحدي الإدراكي</p>
+        <p class="games-desc">كل لعبة مصممة لتقوية مهارة ذهنية محددة</p>
+
+        <div id="games-grid" class="games-grid"></div>
+
     </div>
 
-    <!-- 3. نافذة اللعبة المنبثقة -->
-    <div id="active-game-modal" class="modal-overlay hidden">
-        <div class="modal-window-box">
-            <div class="modal-top-bar">
-                <h3 id="modal-game-heading">عنوان اللعبة</h3>
-                <button class="modal-exit-btn" onclick="closeActiveGameModal()">✖ إغلاق اللعبة</button>
-            </div>
-            <div id="modal-game-content-area" class="modal-content-area"></div>
+    <!-- ============================================
+         3. شاشة اللعبة
+         ============================================ -->
+    <div id="game-modal" class="modal hidden">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeGame()" type="button" aria-label="إغلاق">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="22" height="22">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            <div id="game-content" class="game-content"></div>
         </div>
     </div>
 
