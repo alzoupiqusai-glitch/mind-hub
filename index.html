@@ -13,6 +13,54 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- صفحة الترحيب -->
+<div id="welcome-screen" class="welcome-screen hidden">
+    <div class="welcome-inner">
+        <div class="welcome-logo-wrap">
+            <svg class="welcome-logo" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="welcomeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="100%" stop-color="#EC4899"/>
+                    </linearGradient>
+                    <linearGradient id="welcomeRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#7C3AED" stop-opacity="0.6"/>
+                        <stop offset="100%" stop-color="#EC4899" stop-opacity="0.6"/>
+                    </linearGradient>
+                </defs>
+
+                <circle cx="80" cy="80" r="62" stroke="url(#welcomeRingGrad)" stroke-width="2.5" fill="none" stroke-dasharray="4 8"/>
+                <circle cx="80" cy="80" r="72" stroke="url(#welcomeRingGrad)" stroke-width="1" fill="none" opacity="0.35"/>
+
+                <path d="M 42 105 L 42 55 L 62 80 L 80 55 L 80 105" stroke="url(#welcomeGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <path d="M 96 55 L 96 105 M 96 55 L 124 55 M 96 78 L 118 78" stroke="url(#welcomeGrad)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+        </div>
+
+        <h1 class="welcome-title">أهلاً بك</h1>
+        <p class="welcome-subtitle">في منصة درب عقلك</p>
+
+        <div class="welcome-divider"></div>
+
+        <p class="welcome-text">
+            منصة عربية تهدف إلى بناء جيل يمتلك عقلاً مُدرَّباً
+            <br>
+            قادراً على التركيز والتفكير السريع،
+            <br>
+            من خلال تحديات ذهنية ممتعة ومبتكرة.
+        </p>
+
+        <button class="welcome-btn" onclick="startJourney()" type="button">
+            <span>ابدأ التحدي</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+            </svg>
+        </button>
+
+        <p class="welcome-hint">🎯 اكتشف قوة عقلك</p>
+    </div>
+</div>
  <!-- شاشة التحميل -->
 <div id="cinematic-loader" class="cinematic-loader">
     <div class="loader-content">
