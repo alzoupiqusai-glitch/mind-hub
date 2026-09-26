@@ -1240,7 +1240,7 @@ LAUNCHERS.spatial = function(container, game) {
 
         const cells = container.querySelectorAll('.memory-cell');
 
-        setTimeout(() => targets.forEach(i => cells[i].classList.add('highlight')), 400);
+        setTimeout(() => targets.forEach(i => cells[i].classList.add('highlight')), 700);
 
         setTimeout(() => {
             targets.forEach(i => cells[i].classList.remove('highlight'));
@@ -1263,7 +1263,7 @@ LAUNCHERS.spatial = function(container, game) {
             });
 
             startTimer(() => { wrong++; playWrong(); idx++; render(); });
-        }, 2600);
+        }, 3500);
     }
 
     render();
@@ -3357,7 +3357,7 @@ console.log('%c✅ الذاكرة العكسية معدّلة (كلمة "ثم" �
    ============================================================ */
 
 LAUNCHERS.colors = function(container, game) {
-    timeLimit = 10;
+    timeLimit = 14;
     const bank = MF_getBank('colors');
     const rounds = MF_pickUnique(bank, 5);
 
@@ -3387,7 +3387,7 @@ LAUNCHERS.colors = function(container, game) {
             const c = r.colors[step];
             stage.innerHTML = `<div style="width:180px;height:180px;border-radius:28px;background:${c.hex};box-shadow:0 0 50px ${c.hex};"></div>`;
             step++;
-            setTimeout(next, 700);
+            setTimeout(next, 1000);
         }
         next();
     }
